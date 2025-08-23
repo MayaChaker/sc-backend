@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const UserRoute = require("./Routes/UserRoute");
 const sectionRoute = require("./Routes/sectionRoute");
 const addressRoute = require("./Routes/addressRoute");
@@ -8,9 +9,9 @@ const scheduleRoute = require("./Routes/shceduleRoute");
 const medicalRecordRoute = require("./Routes/medicalRecordRoute");
 const medicalRecordFileRoute = require("./Routes/medicalRecordFileRoute");
 const filesRoute = require("./Routes/filesRoute");
-
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use("/files", filesRoute);
 app.use("/medical_record_file", medicalRecordFileRoute);

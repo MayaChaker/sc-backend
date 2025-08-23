@@ -78,12 +78,14 @@ const createUser = async (req, res) => {
         message: "All fields required",
       });
     }
+    const passwordHash = await bcrypt.hash(password, 10);
+
     const newUser = await User.create({
       first_name,
       last_name,
       role,
       username,
-      password,
+      password: passwordHash,
       dob,
       gender,
       contact_number,
@@ -92,8 +94,9 @@ const createUser = async (req, res) => {
       gender,
       section_id,
     });
-
-    res.status(201).json(newUser);
+    const userData = newUser.get({ plain: true });
+    delete userData.password;
+    res.status(201).json(userData);
   } catch (error) {
     console.error("createUser error:", error);
     res.status(500).json({ error: "Failed to create user account" });
@@ -247,18 +250,12 @@ const register = async (req, res) => {
       specialization,
       address,
     });
+    const userData = newUser.get({ plain: true });
+    delete userData.password;
 
-    res.status(201).json({
-      user: {
-        user_id: newUser.user_id,
-        username: newUser.username,
-        role: newUser.role,
-        first_name: newUser.first_name,
-        last_name: newUser.last_name,
-      },
-    });
+    res.status(201).json(userData);
   } catch (error) {
-    console.error("register error:", message.error);
+    console.error("register error:", error);
     res.status(500).json({ error: "Failed to register" });
   }
 };
