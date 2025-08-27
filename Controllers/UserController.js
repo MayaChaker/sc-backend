@@ -4,7 +4,18 @@ const jwt = require("jsonwebtoken");
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await User.findAll({
+      attributes: [
+        "user_id",
+        "first_name",
+        " last_name",
+        "role",
+        "username",
+        "dob",
+        "contact_number",
+        "section_id",
+      ],
+    });
     const result = users.map((user) => {
       const info = {
         user_id: user.user_id,
