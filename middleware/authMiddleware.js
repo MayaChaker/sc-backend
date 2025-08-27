@@ -3,7 +3,8 @@ const User = require("../Models/userModel");
 
 const auth = async (req, res, next) => {
   try {
-    const token = req.cookies.Token;
+    const cookieName = process.env.COOKIE_Name || "Token";
+    const token = req.cookies[cookieName];
     if (!token) return res.status(401).json({ message: "Not loged in" });
 
     const data = jwt.verify(token, process.env.JWT_SECRET);

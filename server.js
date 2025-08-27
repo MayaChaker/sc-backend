@@ -10,8 +10,16 @@ const medicalRecordRoute = require("./Routes/medicalRecordRoute");
 const medicalRecordFileRoute = require("./Routes/medicalRecordFileRoute");
 const filesRoute = require("./Routes/filesRoute");
 const app = express();
+const cookieParser = require("cookie-parser");
+require("dotenv").config();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 app.use(express.json());
 app.use("/files", filesRoute);
 app.use("/medical_record_file", medicalRecordFileRoute);
@@ -19,7 +27,6 @@ app.use("/medical_record", medicalRecordRoute);
 app.use("/schedule", scheduleRoute);
 app.use("/users", UserRoute);
 app.use("/section", sectionRoute);
-
 app.use("/address", addressRoute);
 app.use("/appointment", appointmentRoute);
 app.use("/message", messageRoute);

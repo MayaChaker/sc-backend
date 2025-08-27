@@ -1,5 +1,6 @@
 const User = require("../Models/userModel");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const getAllUsers = async (req, res) => {
   try {
@@ -159,13 +160,25 @@ const loginUser = async (req, res) => {
     }
     const user = await User.findOne({ where: { username } });
     if (!user) {
-      return res.status(404).json({ error: "User not exist" });
+      return res.status(404).json({ message: "User not exist" });
     }
     const exist = await bcrypt.compare(password, user.password);
     if (!exist) {
-      return res.status(401).json({ error: "Incorrect Password" });
+      return res.status(401).json({ message: "Incorrect Password" });
     }
-    res.json({
+    const token = jwt.sign(
+      { user_id: user.user_id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES || "7d" }
+    );
+
+    res.cookie(process.env.COOKIE_NAME || "Token", token, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    res.status(200).json({
       user: {
         user_id: user.user_id,
         username: user.username,
@@ -176,7 +189,7 @@ const loginUser = async (req, res) => {
     });
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({ error: "Failed to login" });
+    res.status(500).json({ message: "Failed to login" });
   }
 };
 

@@ -73,7 +73,7 @@ const updateMedicalRecordFile = async (req, res) => {
     res.status(200).json(update);
   } catch (error) {
     console.error("updateMedicalRecordFile error", error);
-    res.status(500).json({ error: "Failed to update medical record" });
+    res.status(500).json({ message: "Failed to update medical record" });
   }
 };
 const deleteMedicalRecordFile = async (req, res) => {
@@ -88,7 +88,7 @@ const deleteMedicalRecordFile = async (req, res) => {
     res.status(200).json({ message: "delete succesfully" });
   } catch (error) {
     console.error("Error deleting", error);
-    res.status(500).json({ error: "Failed to delete medical record" });
+    res.status(500).json({ message: "Failed to delete medical record" });
   }
 };
 module.exports = {

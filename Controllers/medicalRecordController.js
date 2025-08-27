@@ -21,7 +21,17 @@ const createRecord = async (req, res) => {
 
 const getAllRecords = async (req, res) => {
   try {
-    const records = await MedicalRecord.findAll();
+    const records = await MedicalRecord.findAll({
+      attributes: [
+        "record_id",
+        "type",
+        "title",
+        "doctor",
+        "patient",
+        "submitted_by",
+        "created_at",
+      ],
+    });
     res.status(200).json(records);
   } catch (error) {
     console.error("getAllRecord error:", error);

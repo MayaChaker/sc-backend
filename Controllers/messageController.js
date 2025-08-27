@@ -23,6 +23,13 @@ const getMessage = async (req, res) => {
           { sender: to, receiver: from },
         ],
       },
+      attributes: [
+        "message_id",
+        "sender",
+        "receiver",
+        "message_content",
+        "created_at",
+      ],
       order: [["created_at", "ASC"]],
     });
     res.status(200).json(messages);

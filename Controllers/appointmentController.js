@@ -5,6 +5,15 @@ const User = require("../Models/userModel");
 const getAllAppointments = async (req, res) => {
   try {
     const appointments = await Appointment.findAll({
+      attributes: [
+        "appointment_id",
+        "date",
+        "time",
+        "status",
+        "doctor",
+        "patient",
+        "created_at",
+      ],
       include: [
         {
           model: User,
